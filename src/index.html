@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Seminar Landing Page">
+    <meta name="keywords" content="names, randomizer, picker, socratic, seminar">
+    <meta name="author" content="Donald Nelson">
+    <link rel=stylesheet href="css/styles.css" type="text/css">
+    <title>Seminar Name Picker</title>
+</head>
+<body>
+    <header class="">
+        <h1>Seminar Leader Selector</h1>
+        <h5>for all your socratic seminar needs</h5>
+    </header>
+
+    <section>
+        <div class=input>
+            <!-- Don't use a form since it will cause a submission to occur when enter is pressed: unwanted behavior -->
+            <!--We can use class, id, or name to distignuish inputs
+                To access the name, refer: input[name="name"]-->
+    
+            <div class="floating-label-container">
+                <input id="inputName" class="floating-label-field" type="text" placeholder="Enter a name">
+                <label for="inputName" class="floating-label">Enter a name</label>
+            </div>
+        
+            <div class=buttons>
+                <input class="" id="btnAdd" type="button" value="Add">
+            
+                <input class="" id="btnRemove" type="button" disabled value="Remove">
+                <input class="" id="btnRemoveAll" type="button" value="Remove All">
+    
+                <input class="" id="btnReset" type="button" value="Reset">
+                <input class="" id="btnChoose" type="button" value="New Leader">
+            </div>
+    
+        </div>
+    
+        <h3>Names List</h3>
+        <p id="leaderText">
+            Leader: None
+        </p>
+    
+        <ul id="ulNamesList">
+            <!-- decide between tabindex and buttons-->
+            <li tabindex="0" draggable="true" class="name used" id="name-bob">
+                <img src="icons/arrow_circle_up-24px.svg" alt="Move Up" width="24em">
+                Bob
+                <img src="icons/arrow_circle_down-24px.svg" alt="Move Up" width="24em">
+            </li>
+            <li tabindex="0" draggable="true" class="name leader" id="name-joe">
+                <img src="icons/arrow_circle_up-24px.svg" alt="Move Up" width="24em">
+                Joe
+                <img src="icons/arrow_circle_down-24px.svg" alt="Move Up" width="24em">
+            </li>
+            <li tabindex="0" draggable="true" class="name" id="name-anne">
+                <img src="icons/arrow_circle_up-24px.svg" alt="Move Up" width="24em">
+                Anne
+                <img src="icons/arrow_circle_down-24px.svg" alt="Move Up" width="24em">
+            </li>
+            <li tabindex="0" draggable="true" class="name" id="name-rick">Rick</li>
+            <li tabindex="0" draggable="true" class="name" id="name-jill">Jill</li>
+            <li tabindex="0" draggable="true" class="name" id="name-zoe">Zoe</li>
+            <li tabindex="0" draggable="true" class="name" id="name-doug">Doug</li>
+            <li tabindex="0" draggable="true" class="name" id="name-sam">Sam</li>
+            <li tabindex="0" draggable="true" class="name" id="name-julie">Julie</li>
+    
+        </ul>
+    
+        <div class=debug>
+            <h3>Names Left</h3>
+            <ul id="ulNamesLeft">
+                
+            </ul>
+    
+            <h3>Names Used</h3>
+            <ul id="ulNamesUsed">
+                
+            </ul> 
+        </div>
+    
+        <!-- <hr> -->
+    
+        <div class="todo">
+            <h2>Things todo</h2>
+            <ol>
+                <li class=done>HTML backbone</li>
+                <li class=done>CSS styling</li>
+                <li class=done>JS business logic</li>
+                <li>Linking JS with HTML</li>
+            </ol>
+        </div>
+
+        <footer>
+            
+        </footer>
+
+    </section>
+
+    
+
+    <!--Generally, it is best practice to place the script at the end of the body so the page is fully loaded and rendered before it loads and parses the JS-->
+    <script src="js/index.js"></script>
+    
+</body>
+</html>
