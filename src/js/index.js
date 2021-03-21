@@ -1,5 +1,28 @@
 var input = document.querySelector(".buttons");
 var nameField = document.querySelector("#inputName");
+var nextNameId = 0;
+var domRemoveButton = input.querySelector("#btnRemove");
+
+var domList = document.querySelector("#ulNamesList");
+var sortableNamesList = new Sortable(domList, {
+    delay: 100,
+    delayOnTouchOnly: true,
+    touchStartThreshold: 1,
+    animation: 150,
+    ghostClass: "ghost",
+    onEnd: (e) => {
+        console.log(e.item + "reordered from index " + e.oldIndex + " to " + e.newIndex);
+    }
+});
+
+// Event listeners
+input.addEventListener("keydown", handleKeyDown);
+input.addEventListener("keyup", handleKeyUp);
+input.addEventListener("pointerdown", handlePointerDown);
+document.addEventListener("pointerup", handlePointerUp);
+domList.addEventListener("keydown", handleNameKeyDown);
+domList.addEventListener("keyup", handleNameKeyUp);
+domList.addEventListener("pointerup", handleNamePointerUp);
 
 //#region polyfills
 
@@ -147,13 +170,13 @@ function handlePointerUp(e) {
 function fireButtonFunction(buttonId) {
     switch (buttonId) {
         case "btnAdd":
-            // Do something
+            btnAdd();
             break;
         case "btnRemove":
-            // Do something
+            btnRemove();
             break;
         case "btnRemoveAll":
-            // Do something
+            btnRemoveAll();
             break;
         case "btnReset":
             // Do something
@@ -164,13 +187,8 @@ function fireButtonFunction(buttonId) {
         default:
             console.log("A button was pressed, but I haven't implemented it yet!")
     }
+    saveToLocalStorage();
 }
-
-// Event listeners
-input.addEventListener("keydown", handleKeyDown);
-input.addEventListener("keyup", handleKeyUp);
-input.addEventListener("pointerdown", handlePointerDown);
-document.addEventListener("pointerup", handlePointerUp);
 
 //#endregion
 
@@ -178,7 +196,27 @@ document.addEventListener("pointerup", handlePointerUp);
 //#region Button functions
 
 function btnAdd() {
+    var name = removeTrailingWhiteSpace(nameField.value);
+    if (name.length > 0) {
+        addNamesToLists([name], [saveData.namesTotal, saveData.namesLeft]);
+        domList.appendChild(newNameNode(name));
+        console.log(name + " added");
+    }
+    nameField.value = "";
+}
 
+function btnRemoveAll() {
+    var namesCopy = saveData.namesTotal.concat();
+    removeNameNodes(namesCopy);
+    removeNamesFromLists(namesCopy, [saveData.namesUsed, saveData.namesLeft, saveData.namesTotal, selectedDomNames]);
+    console.log("removed all names")
+}
+
+function btnRemove() {
+    var namesCopy = selectedDomNames.concat();
+    removeNameNodes(namesCopy);
+    removeNamesFromLists(namesCopy, [saveData.namesUsed, saveData.namesLeft, saveData.namesTotal, selectedDomNames]);
+    console.log("removed " + namesCopy);
 }
 
 //#endregion
@@ -197,7 +235,9 @@ else {
     verifySaveData();
 }
 saveToLocalStorage();
+createInitialNodes();
 
+// TODO: Restructure to use a name object, map, or array to store a String (name) and a boolean (isUsed)
 function newSaveData() {
     saveData = {
         namesTotal: [],
@@ -210,21 +250,36 @@ function newSaveData() {
 function verifySaveData() {
     if (saveData.namesTotal === undefined) {
         saveData.namesTotal = [];
+        saveData.namesUsed = [];
+        saveData.namesLeft = [];
     }
     if (saveData.namesUsed === undefined) {
         saveData.namesUsed = [];
     }
     if (saveData.namesLeft === undefined) {
-        saveData.namesLeft = [];
+        saveData.namesLeft = saveData.namesTotal;
     }
     if (saveData.nameLeader === undefined) {
         saveData.nameLeader = "";
     }
 }
 
-
 function saveToLocalStorage() {
     localStorage.setItem("names", JSON.stringify(saveData));
+}
+
+function createInitialNodes() {
+    var foundLeader = false;
+    for (var i = 0; i < saveData.namesTotal.length; i++) {
+        var element = newNameNode(saveData.namesTotal[i]);
+        if (!foundLeader) {
+            if (saveData.namesTotal[i] == saveData.nameLeader) {
+                foundLeader = true;
+                addClass(element, "leader");
+            }
+        }
+        domList.appendChild(element);
+    }
 }
 
 //#endregion
@@ -323,7 +378,32 @@ function moveNameInList(name, list, indexTo) {
 
 //#region DOM Update functions
 
+// Name item template; React would probably be a better choice for this
+function newNameNode(name) {
+    name = removeTrailingWhiteSpace(name);
+    var li = document.createElement("LI");
+    li.innerHTML = name;
+    li.className = "name";
+    li.setAttribute("tabindex" , "0");
+    li.setAttribute("data-name", name);
+    // li.id = "name-" + name; // id is unused
+    nextNameId++;
+    return li;
+}
 
+/**
+ * Remove name nodes from the DOM
+ * @param {Array} nameNodes Array of names
+ */
+function removeNameNodes(names) {
+    for (var nameIndex = 0; nameIndex < names.length; nameIndex++) {
+        var name = removeTrailingWhiteSpace(names[nameIndex]);
+        var e = domList.querySelector("[data-name='" + name + "']");
+        if (e != null) domList.removeChild(e);
+        selectedDomNames = [];
+    }
+    domRemoveButton.disabled = true;
+}
 
 //#endregion
 
@@ -331,18 +411,27 @@ function moveNameInList(name, list, indexTo) {
 //#region DOM Name List Selection & Interaction
 
 var selectedDomNames = [];
+// var selectedNodeIDs = [];
 
 function toggleNameSelection(e) {
     if (hasClass(e.target, "selected")) {
         removeClass(e.target, "selected");
-        var i = selectedDomNames.indexOf(e.target.childNodes[0].nodeValue);
-        if (1 > -1) {
+
+        var i = selectedDomNames.indexOf(e.target.getAttribute("data-name"));
+        if (i > -1) {
             selectedDomNames.splice(i, 1);
         }
     }
     else {
         addClass(e.target, "selected");
-        selectedDomNames.push(e.target.childNodes[0].nodeValue);
+        selectedDomNames.push(e.target.getAttribute("data-name"));
+        // console.log(e.target.childNodes);
+    }
+    if (selectedDomNames.length > 0) {
+        domRemoveButton.disabled = false;
+    }
+    else {
+        domRemoveButton.disabled = true;
     }
 }
 
@@ -364,27 +453,5 @@ function handleNamePointerUp(e) {
         toggleNameSelection(e);
     }
 }
-
-var domList = document.querySelector("#ulNamesList");
-domList.addEventListener("keydown", handleNameKeyDown);
-domList.addEventListener("keyup", handleNameKeyUp);
-domList.addEventListener("pointerup", handleNamePointerUp);
-
-domList.addEventListener("drag", (e)=> {
-    console.log("drag event fired");
-    e.preventDefault();
-});
-
-domList.addEventListener("dragstart", (e)=> {
-    console.log("drag start event fired");
-    e.preventDefault();
-});
-
-domList.addEventListener("dragend", (e)=> {
-    console.log("drag end event fired");
-    e.preventDefault();
-});
-
-
 
 //#endregion

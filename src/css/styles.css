@@ -192,6 +192,10 @@ ul#ulNamesList li.selected {
     box-shadow: 0 0 0.3em -0.1em rgba(0,0,0,0.5);
 }
 
+ul#ulNamesList li.ghost {
+    opacity: 0%;
+}
+
 ul#ulNamesList li:focus {
     /* border-style: dashed;
     border-color: rgba(0, 0, 0, 0.5); */

@@ -44,28 +44,6 @@
         </p>
     
         <ul id="ulNamesList">
-            <!-- decide between tabindex and buttons-->
-            <li tabindex="0" draggable="true" class="name used" id="name-bob">
-                <img src="icons/arrow_circle_up-24px.svg" alt="Move Up" width="24em">
-                Bob
-                <img src="icons/arrow_circle_down-24px.svg" alt="Move Up" width="24em">
-            </li>
-            <li tabindex="0" draggable="true" class="name leader" id="name-joe">
-                <img src="icons/arrow_circle_up-24px.svg" alt="Move Up" width="24em">
-                Joe
-                <img src="icons/arrow_circle_down-24px.svg" alt="Move Up" width="24em">
-            </li>
-            <li tabindex="0" draggable="true" class="name" id="name-anne">
-                <img src="icons/arrow_circle_up-24px.svg" alt="Move Up" width="24em">
-                Anne
-                <img src="icons/arrow_circle_down-24px.svg" alt="Move Up" width="24em">
-            </li>
-            <li tabindex="0" draggable="true" class="name" id="name-rick">Rick</li>
-            <li tabindex="0" draggable="true" class="name" id="name-jill">Jill</li>
-            <li tabindex="0" draggable="true" class="name" id="name-zoe">Zoe</li>
-            <li tabindex="0" draggable="true" class="name" id="name-doug">Doug</li>
-            <li tabindex="0" draggable="true" class="name" id="name-sam">Sam</li>
-            <li tabindex="0" draggable="true" class="name" id="name-julie">Julie</li>
     
         </ul>
     
@@ -102,6 +80,7 @@
     
 
     <!--Generally, it is best practice to place the script at the end of the body so the page is fully loaded and rendered before it loads and parses the JS-->
+    <script src="node_modules/sortablejs/Sortable.js"></script>
     <script src="js/index.js"></script>
     
 </body>
