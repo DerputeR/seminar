@@ -170,13 +170,13 @@ ul#ulNamesList li.name {
     vertical-align: middle;
 }
 
-ul#ulNamesList li.used {
+ul#ulNamesList li.name[data-used="true"] {
     background-color: rgb(0,0,0,0.15);
     color: rgb(0,0,0,0.3);
     /* border-color: darkgray; */
 }
 
-ul#ulNamesList li.leader {
+ul#ulNamesList li.name.leader {
     background-color: var(--theme-green-chosen);
     /* color: white; */
     /* border-color: gold; */
