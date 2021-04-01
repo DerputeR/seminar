@@ -539,3 +539,18 @@ function updateDomSelectedNames() {
 
 
 //#endregion
+
+//#region Import/Export
+// From https://www.codevoila.com/post/30/export-json-data-to-downloadable-file-using-javascript
+
+function exportToJsonFile(jsonData) {
+    var dataStr = JSON.stringify(jsonData);
+    var dataURI = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+    var defaultName = 'nameslist.json';
+
+    
+}
+
+
+//#endregion

@@ -66,6 +66,33 @@ div.input {
     display: block;
 }
 
+/* div.buttons {
+    display: flex;
+    justify-content: center;
+} */
+
+div.buttons div {
+    display: inline;
+}
+
+div#io {
+    /* padding: 0; */
+    /* display: block; */
+    /* margin: 0; */
+    font-size: 1em;
+    text-align: center;
+    vertical-align: bottom;
+}
+
+div#io input[type=button] {
+    box-sizing: border-box;
+    font-size: 1em;
+    padding: 0em;
+    margin: 0.3em 0.1em;
+    height: 2.3583375em;
+    width: 2.75em;
+}
+
 input[type="text"] {
     padding: 0.7em;
     height: 3em;
@@ -78,6 +105,7 @@ input[type="text"] {
 }
 
 input[type="button"] {
+    cursor: pointer;
     color: white;
     background-color: var(--theme-green);
     font-size: 0.8em;
