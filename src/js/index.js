@@ -9,6 +9,11 @@ var domList = document.querySelector("#ulNamesList");
 var domAllNames = []; // Keep track of every dom name element to allow for easy removal of names. Needs to update everytime a name is added/removed
 var domSelectedNameIndices = []; // Pull the indicies of the selected dom elements from the above list
 
+var exportAnchorElem = input.querySelector("#download_export");
+var importInput = input.querySelector("#upload_import");
+importInput.addEventListener("change", handleFileUpload);
+var reader = new FileReader();
+
 
 // Event listeners
 input.addEventListener("keydown", handleKeyDown);
@@ -205,6 +210,12 @@ function fireButtonFunction(buttonId) {
         case "btnChoose":
             btnChoose();
             break;
+        case "btnExport":
+            btnExport();
+            break;
+        case "btnImport":
+            btnImport();
+            break;
         default:
             console.log("A button was pressed, but I haven't implemented it yet!")
     }
@@ -288,6 +299,15 @@ function btnReset() {
     }
     domLeaderText.innerText = "Leader: None";
     saveToLocalStorage();
+}
+
+function btnExport() {
+    // saveToLocalStorage();
+    exportToJsonFile(saveData);
+}
+
+function btnImport() {
+    importFromJsonFile();
 }
 //#endregion
 
@@ -408,6 +428,10 @@ function removeNamesByIndex(indices) {
         }
         domAllNames[nameIndex].remove();
         elementsRemoved++;
+        if (nameIndex == saveData.nameLeaderIndex) {
+            saveData.nameLeaderIndex = -1;
+            domLeaderText.innerText = "Leader: None";
+        }
     }
     // domRemoveButton.disabled = true;
     updateDomAllNames(); // make sure the record is up-to-date
@@ -543,14 +567,56 @@ function updateDomSelectedNames() {
 //#region Import/Export
 // From https://www.codevoila.com/post/30/export-json-data-to-downloadable-file-using-javascript
 
-function exportToJsonFile(jsonData) {
-    var dataStr = JSON.stringify(jsonData);
+function exportToJsonFile(data) {
+    var dataStr = JSON.stringify(data);
     var dataURI = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
 
     var defaultName = 'nameslist.json';
-
-    
+    exportAnchorElem.setAttribute("href", dataURI);
+    exportAnchorElem.setAttribute("download", defaultName);
+    exportAnchorElem.click();    
 }
 
+function importFromJsonFile() {
+    importInput.click();
+}
+
+function handleFileUpload() {
+    var files = importInput.files;
+    if (files.length > 0) {
+        var file = files[0];
+        var jsonData;
+        reader.onload = (e) => {
+            jsonData = e.target.result;
+            try {
+                jsonData = JSON.parse(jsonData);
+                if (jsonData.hasOwnProperty("names") && jsonData.hasOwnProperty("nameLeaderIndex")) {
+                    console.log("validating...");
+                    console.log(jsonData.names.length + " entries");
+                    console.log(jsonData);
+                    for (var i = 0; i < jsonData.names.length; i++) {
+                        if (typeof(jsonData.names[i][0]) != "string" || typeof(jsonData.names[i][1]) != "boolean") {
+                            console.log(typeof(jsonData.names[i][0]));
+                            console.log(typeof(jsonData.names[i][1]));
+                            throw new TypeError("data corrupt");
+                        }
+                    }
+                    console.log("validated.");
+                    btnRemoveAll();
+                    saveData = jsonData;
+                    verifySaveData();
+                    saveToLocalStorage();
+                    createInitialNodes();
+                    updateDomAllNames();
+                    console.log("import complete");
+                }
+            }
+            catch (error) {
+                console.log("Bad json file! " + error);
+            }
+        }
+        reader.readAsText(file);
+    }
+}
 
 //#endregion

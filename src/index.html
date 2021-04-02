@@ -37,9 +37,11 @@
                     <input class="" id="btnReset" type="button" value="Reset">
                     <input class="" id="btnChoose" type="button" value="New Leader">
                 </div>
-                <div id="io" class="material-icons md-36">
-                    <input class="" id="import" type="button" value="file_upload">
-                    <input class="" id="export" type="button" value="file_download">
+                <div id="io" class="material-icons">
+                    <input class="" id="btnImport" type="button" value="file_upload" alt="import" title="Import from JSON">
+                    <input class="" id="btnExport" type="button" value="file_download" title="Export to JSON">
+                    <a id="download_export" style="display:none"></a>
+                    <input type="file" id="upload_import" accept=".json" style="display:none">
                 </div> 
             </div>
     
@@ -75,6 +77,9 @@
                 <li class=done>CSS styling</li>
                 <li class=done>JS business logic</li>
                 <li class=done>Linking JS with HTML</li>
+                <li>Multidrag</li>
+                <li>Better styling for desktop/widescreen</li>
+                <li>Cloud import/export</li>
             </ol>
         </div>
 
