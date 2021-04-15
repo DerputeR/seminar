@@ -21,3 +21,5 @@ A site to help pick Socratic Seminar leaders (or just names from a list in gener
 3. [ ] Basic usage tutorial
 4. [ ] Customizable theme
 5. [ ] Sorting dropdown (alphabetical ascending/descending)
+6. [ ] Backport to older browsers
+7. [ ] Fix/remove the informal to-do list at the footer
