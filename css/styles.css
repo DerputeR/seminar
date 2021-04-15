@@ -42,17 +42,27 @@ header {
     text-align: center;
 }
 
+footer {
+    padding: 1em 1em;
+    margin: 0em;
+    font-size: 1em;
+    color: white;
+    font-weight: normal;
+    background-color: var(--theme-green);
+    text-align: center;
+}
+
 .parallax {
     position: sticky;
     top: 0;
     z-index: -10;
 }
 
-header h1 {
+h1 {
     padding: 0.5em 0.5em 0.1em 0.5em;
 }
 
-header h5 {
+h5, h6, h4 {
     font-weight: normal;
 }
 
@@ -250,6 +260,7 @@ ul#ulNamesList li img:hover {
 div.todo {
     background-color:  rgba(0,0,0,0.07);
     padding: 1.2em 1.8em 1.2em 1.8em;
+    list-style-position: inside;
 }
 
 div.todo h2 {
